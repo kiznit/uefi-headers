@@ -1,7 +1,7 @@
 /** @file
   Provides synchronization functions.
 
-Copyright (c) 2006 - 2012, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials
 are licensed and made available under the terms and conditions of the BSD License
 which accompanies this distribution.  The full text of the license may be found at
@@ -26,7 +26,7 @@ typedef volatile UINTN              SPIN_LOCK;
   optimal spin lock performance.
 
   This function retrieves the spin lock alignment requirements for optimal
-  performance on a given CPU architecture. The spin lock alignment is byte alignment. 
+  performance on a given CPU architecture. The spin lock alignment is byte alignment.
   It must be a power of two and is returned by this function. If there are no alignment
   requirements, then 1 must be returned. The spin lock synchronization
   functions must function correctly if the spin lock size and alignment values
@@ -144,8 +144,7 @@ ReleaseSpinLock (
 
   Performs an atomic increment of the 32-bit unsigned integer specified by
   Value and returns the incremented value. The increment operation must be
-  performed using MP safe mechanisms. The state of the return value is not
-  guaranteed to be MP safe.
+  performed using MP safe mechanisms.
 
   If Value is NULL, then ASSERT().
 
@@ -157,7 +156,7 @@ ReleaseSpinLock (
 UINT32
 EFIAPI
 InterlockedIncrement (
-  IN      UINT32                    *Value
+  IN      volatile UINT32           *Value
   );
 
 
@@ -166,8 +165,7 @@ InterlockedIncrement (
 
   Performs an atomic decrement of the 32-bit unsigned integer specified by
   Value and returns the decremented value. The decrement operation must be
-  performed using MP safe mechanisms. The state of the return value is not
-  guaranteed to be MP safe.
+  performed using MP safe mechanisms.
 
   If Value is NULL, then ASSERT().
 
@@ -179,7 +177,7 @@ InterlockedIncrement (
 UINT32
 EFIAPI
 InterlockedDecrement (
-  IN      UINT32                    *Value
+  IN      volatile UINT32           *Value
   );
 
 
@@ -204,7 +202,7 @@ InterlockedDecrement (
 UINT16
 EFIAPI
 InterlockedCompareExchange16 (
-  IN OUT  UINT16                    *Value,
+  IN OUT  volatile UINT16           *Value,
   IN      UINT16                    CompareValue,
   IN      UINT16                    ExchangeValue
   );
@@ -231,7 +229,7 @@ InterlockedCompareExchange16 (
 UINT32
 EFIAPI
 InterlockedCompareExchange32 (
-  IN OUT  UINT32                    *Value,
+  IN OUT  volatile UINT32           *Value,
   IN      UINT32                    CompareValue,
   IN      UINT32                    ExchangeValue
   );
@@ -258,7 +256,7 @@ InterlockedCompareExchange32 (
 UINT64
 EFIAPI
 InterlockedCompareExchange64 (
-  IN OUT  UINT64                    *Value,
+  IN OUT  volatile UINT64           *Value,
   IN      UINT64                    CompareValue,
   IN      UINT64                    ExchangeValue
   );
@@ -285,7 +283,7 @@ InterlockedCompareExchange64 (
 VOID *
 EFIAPI
 InterlockedCompareExchangePointer (
-  IN OUT  VOID                      **Value,
+  IN OUT  VOID                      * volatile *Value,
   IN      VOID                      *CompareValue,
   IN      VOID                      *ExchangeValue
   );

@@ -1,7 +1,7 @@
 /** @file
   Protocol which allows access to the images in the images database.
 
-(C) Copyright 2016 Hewlett Packard Enterprise Development LP<BR>
+(C) Copyright 2016-2018 Hewlett Packard Enterprise Development LP<BR>
 
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
@@ -10,6 +10,9 @@ http://opensource.org/licenses/bsd-license.php.
 
 THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+  @par Revision Reference:
+  This Protocol was introduced in UEFI Specification 2.6.
 
 **/
 
@@ -28,8 +31,7 @@ typedef struct _EFI_HII_IMAGE_EX_PROTOCOL EFI_HII_IMAGE_EX_PROTOCOL;
 
 /**
   The prototype of this extension function is the same with EFI_HII_IMAGE_PROTOCOL.NewImage().
-  Same with EFI_HII_IMAGE_PROTOCOL.NewImage().This protocol invokes
-EFI_HII_IMAGE_PROTOCOL.NewImage() implicitly.
+  This protocol invokes EFI_HII_IMAGE_PROTOCOL.NewImage() implicitly.
 
   @param  This                   A pointer to the EFI_HII_IMAGE_EX_PROTOCOL instance.
   @param  PackageList            Handle of the package list where this image will
@@ -57,22 +59,24 @@ EFI_STATUS
 /**
   Return the information about the image, associated with the package list.
   The prototype of this extension function is the same with EFI_HII_IMAGE_PROTOCOL.GetImage().
-  Same with EFI_HII_IMAGE_PROTOCOL.SetImage(),this protocol invokes EFI_HII_IMAGE_PROTOCOL.SetImage() implicitly.
+
+  This function is similar to EFI_HII_IMAGE_PROTOCOL.GetImage().The difference is that
+  this function will locate all EFI_HII_IMAGE_DECODER_PROTOCOL instances installed in the
+  system if the decoder of the certain image type is not supported by the
+  EFI_HII_IMAGE_EX_PROTOCOL. The function will attempt to decode the image to the
+  EFI_IMAGE_INPUT using the first EFI_HII_IMAGE_DECODER_PROTOCOL instance that
+  supports the requested image type.
 
   @param  This                   A pointer to the EFI_HII_IMAGE_EX_PROTOCOL instance.
-  @param  PackageList            Handle of the package list where this image will
-                                 be searched.
-  @param  ImageId                The image's id,, which is unique within
-                                 PackageList.
+  @param  PackageList            The package list in the HII database to search for the
+                                 specified image.
+  @param  ImageId                The image's id, which is unique within PackageList.
   @param  Image                  Points to the image.
 
   @retval EFI_SUCCESS            The new image was returned successfully.
-  @retval EFI_NOT_FOUND          The image specified by ImageId is not in the
-                                 database. The specified PackageList is not in
-                                 the database.
-  @retval EFI_BUFFER_TOO_SMALL   The buffer specified by ImageSize is too small to
-                                 hold the image.
-  @retval EFI_INVALID_PARAMETER  The Image or ImageSize was NULL.
+  @retval EFI_NOT_FOUND          The image specified by ImageId is not available. The specified
+                                 PackageList is not in the Database.
+  @retval EFI_INVALID_PARAMETER  Image was NULL or ImageId was 0.
   @retval EFI_OUT_OF_RESOURCES   The bitmap could not be retrieved because there
                                  was not enough memory.
 
@@ -87,21 +91,22 @@ EFI_STATUS
   );
 
 /**
-  Change the information about the image. The prototype of this extension
-  function is the same with EFI_HII_IMAGE_PROTOCOL.SetImage().  Same with
-  EFI_HII_IMAGE_PROTOCOL.DrawImageId(),this protocol invokes EFI_HII_IMAGE_PROTOCOL.DrawImageId() implicitly.
+  Change the information about the image.
+
+  Same with EFI_HII_IMAGE_PROTOCOL.SetImage(),this protocol invokes
+  EFI_HII_IMAGE_PROTOCOL.SetImage()implicitly.
 
   @param  This                   A pointer to the EFI_HII_IMAGE_EX_PROTOCOL instance.
   @param  PackageList            The package list containing the images.
-  @param  ImageId                The image's id,, which is unique within
-                                 PackageList.
+  @param  ImageId                The image's id, which is unique within PackageList.
   @param  Image                  Points to the image.
 
-  @retval EFI_SUCCESS            The new image was updated successfully.
+  @retval EFI_SUCCESS            The new image was successfully updated.
   @retval EFI_NOT_FOUND          The image specified by ImageId is not in the
                                  database. The specified PackageList is not in
                                  the database.
-  @retval EFI_INVALID_PARAMETER  The Image was NULL.
+  @retval EFI_INVALID_PARAMETER  The Image was NULL, the ImageId was 0 or
+                                 the Image->Bitmap was NULL.
 
 **/
 typedef
@@ -114,9 +119,11 @@ EFI_STATUS
   );
 
 /**
-  Renders an image to a bitmap or to the display. The prototype of this extension
-  function is the same with EFI_HII_IMAGE_PROTOCOL.DrawImage().
-  Same with EFI_HII_IMAGE_PROTOCOL.SetImage(),this protocol invokes EFI_HII_IMAGE_PROTOCOL.SetImage() implicitly.
+  Renders an image to a bitmap or to the display.
+
+  The prototype of this extension function is the same with
+  EFI_HII_IMAGE_PROTOCOL.DrawImage(). This protocol invokes
+  EFI_HII_IMAGE_PROTOCOL.DrawImage() implicitly.
 
   @param  This                   A pointer to the EFI_HII_IMAGE_EX_PROTOCOL instance.
   @param  Flags                  Describes how the image is to be drawn.
@@ -125,19 +132,18 @@ EFI_STATUS
                                  to the image, which is Width pixels wide and
                                  Height pixels high.  The image will be drawn onto
                                  this image and  EFI_HII_DRAW_FLAG_CLIP is implied.
-                                 If this points to a  NULL on entry, then a buffer
-                                 will be allocated to hold  the generated image and
+                                 If this points to a NULL on entry, then a buffer
+                                 will be allocated to hold the generated image and
                                  the pointer updated on exit. It is the caller's
                                  responsibility to free this buffer.
   @param  BltX                   Specifies the offset from the left and top edge of
-                                 the  output image of the first pixel in the image.
+                                 the output image of the first pixel in the image.
   @param  BltY                   Specifies the offset from the left and top edge of
-                                 the  output image of the first pixel in the image.
+                                 the output image of the first pixel in the image.
 
   @retval EFI_SUCCESS            The image was successfully drawn.
   @retval EFI_OUT_OF_RESOURCES   Unable to allocate an output buffer for Blt.
   @retval EFI_INVALID_PARAMETER  The Image or Blt was NULL.
-                                 Any combination of Flags is invalid.
 
 **/
 typedef
@@ -153,17 +159,20 @@ EFI_STATUS
 
 /**
   Renders an image to a bitmap or the screen containing the contents of the specified
-  image. The prototype of this extension function is the same with E
-  FI_HII_IMAGE_PROTOCOL.DrawImageId().
-  Same with EFI_HII_IMAGE_PROTOCOL.DrawImageId(),this protocol invokes
-EFI_HII_IMAGE_PROTOCOL.DrawImageId() implicitly.
+  image.
+
+  This function is similar to EFI_HII_IMAGE_PROTOCOL.DrawImageId(). The difference is that
+  this function will locate all EFI_HII_IMAGE_DECODER_PROTOCOL instances installed in the
+  system if the decoder of the certain image type is not supported by the
+  EFI_HII_IMAGE_EX_PROTOCOL. The function will attempt to decode the image to the
+  EFI_IMAGE_INPUT using the first EFI_HII_IMAGE_DECODER_PROTOCOL instance that
+  supports the requested image type.
 
   @param  This                   A pointer to the EFI_HII_IMAGE_EX_PROTOCOL instance.
   @param  Flags                  Describes how the image is to be drawn.
   @param  PackageList            The package list in the HII database to search for
                                  the  specified image.
-  @param  ImageId                The image's id, which is unique within
-                                 PackageList.
+  @param  ImageId                The image's id, which is unique within PackageList.
   @param  Blt                    If this points to a non-NULL on entry, this points
                                  to the image, which is Width pixels wide and
                                  Height pixels high. The image will be drawn onto
@@ -179,7 +188,7 @@ EFI_HII_IMAGE_PROTOCOL.DrawImageId() implicitly.
 
   @retval EFI_SUCCESS            The image was successfully drawn.
   @retval EFI_OUT_OF_RESOURCES   Unable to allocate an output buffer for Blt.
-  @retval EFI_INVALID_PARAMETER  The Blt was NULL.
+  @retval EFI_INVALID_PARAMETER  The Blt was NULL or ImageId was 0.
   @retval EFI_NOT_FOUND          The image specified by ImageId is not in the database.
                                  The specified PackageList is not in the database.
 
@@ -206,7 +215,7 @@ EFI_STATUS
   @param  This                   A pointer to the EFI_HII_IMAGE_EX_PROTOCOL instance.
   @param  PackageList            Handle of the package list where this image will
                                  be searched.
-  @param  ImageId                The image's id,, which is unique within PackageList.
+  @param  ImageId                The image's id, which is unique within PackageList.
   @param  Image                  Points to the image.
 
   @retval EFI_SUCCESS            The new image was returned successfully.
@@ -214,7 +223,7 @@ EFI_STATUS
                                  database. The specified PackageList is not in the database.
   @retval EFI_BUFFER_TOO_SMALL   The buffer specified by ImageSize is too small to
                                  hold the image.
-  @retval EFI_INVALID_PARAMETER  The Image or ImageSize was NULL.
+  @retval EFI_INVALID_PARAMETER  The Image was NULL or the ImageId was 0.
   @retval EFI_OUT_OF_RESOURCES   The bitmap could not be retrieved because there
                                  was not enough memory.
 
@@ -225,7 +234,7 @@ EFI_STATUS
   IN CONST  EFI_HII_IMAGE_EX_PROTOCOL       *This,
   IN        EFI_HII_HANDLE                  PackageList,
   IN        EFI_IMAGE_ID                    ImageId,
-  OUT       EFI_IMAGE_INPUT                 *Image
+  OUT       EFI_IMAGE_OUTPUT                *Image
   );
 
 ///

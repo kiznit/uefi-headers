@@ -1,10 +1,10 @@
 /** @file
-  SMM Software Dispatch Protocol as defined in PI 1.2 Specification
+  SMM Software Dispatch Protocol introduced from PI 1.2 Specification
   Volume 4 System Management Mode Core Interface.
 
   This protocol provides the parent dispatch service for a given SMI source generator.
 
-  Copyright (c) 2009 - 2012, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2009 - 2018, Intel Corporation. All rights reserved.<BR>
   This program and the accompanying materials
   are licensed and made available under the terms and conditions of the BSD License
   which accompanies this distribution.  The full text of the license may be found at
@@ -18,12 +18,10 @@
 #ifndef _SMM_SW_DISPATCH2_H_
 #define _SMM_SW_DISPATCH2_H_
 
+#include <Protocol/MmSwDispatch.h>
 #include <Pi/PiSmmCis.h>
 
-#define EFI_SMM_SW_DISPATCH2_PROTOCOL_GUID \
-  { \
-    0x18a3c6dc, 0x5eea, 0x48c8, {0xa1, 0xc1, 0xb5, 0x33, 0x89, 0xf9, 0x89, 0x99 } \
-  }
+#define EFI_SMM_SW_DISPATCH2_PROTOCOL_GUID EFI_MM_SW_DISPATCH_PROTOCOL_GUID
 
 ///
 /// A particular chipset may not support all possible software SMI input values.
@@ -35,9 +33,9 @@ typedef struct {
 } EFI_SMM_SW_REGISTER_CONTEXT;
 
 ///
-/// The DispatchFunction will be called with Context set to the same value as was passed into 
+/// The DispatchFunction will be called with Context set to the same value as was passed into
 /// this function in RegisterContext and with CommBuffer (and CommBufferSize) pointing
-/// to an instance of EFI_SMM_SW_CONTEXT indicating the index of the CPU which generated the 
+/// to an instance of EFI_SMM_SW_CONTEXT indicating the index of the CPU which generated the
 /// software SMI.
 ///
 typedef struct {
@@ -60,14 +58,14 @@ typedef struct _EFI_SMM_SW_DISPATCH2_PROTOCOL  EFI_SMM_SW_DISPATCH2_PROTOCOL;
 /**
   Register a child SMI source dispatch function for the specified software SMI.
 
-  This service registers a function (DispatchFunction) which will be called when the software 
-  SMI source specified by RegisterContext->SwSmiCpuIndex is detected. On return, 
-  DispatchHandle contains a unique handle which may be used later to unregister the function 
+  This service registers a function (DispatchFunction) which will be called when the software
+  SMI source specified by RegisterContext->SwSmiCpuIndex is detected. On return,
+  DispatchHandle contains a unique handle which may be used later to unregister the function
   using UnRegister().
 
   @param[in]  This                 Pointer to the EFI_SMM_SW_DISPATCH2_PROTOCOL instance.
-  @param[in]  DispatchFunction     Function to register for handler when the specified software 
-                                   SMI is generated. 
+  @param[in]  DispatchFunction     Function to register for handler when the specified software
+                                   SMI is generated.
   @param[in, out] RegisterContext  Pointer to the dispatch function's context.
                                    The caller fills this context in before calling
                                    the register function to indicate to the register
@@ -80,7 +78,7 @@ typedef struct _EFI_SMM_SW_DISPATCH2_PROTOCOL  EFI_SMM_SW_DISPATCH2_PROTOCOL;
                                  registered and the SMI source has been enabled.
   @retval EFI_DEVICE_ERROR       The SW driver was unable to enable the SMI source.
   @retval EFI_INVALID_PARAMETER  RegisterContext is invalid. The SW SMI input value
-                                 is not within valid range.
+                                 is not within a valid range or is already in use.
   @retval EFI_OUT_OF_RESOURCES   There is not enough memory (system or SMM) to manage this
                                  child.
   @retval EFI_OUT_OF_RESOURCES   A unique software SMI value could not be assigned
@@ -98,7 +96,7 @@ EFI_STATUS
 /**
   Unregister a child SMI source dispatch function for the specified software SMI.
 
-  This service removes the handler associated with DispatchHandle so that it will no longer be 
+  This service removes the handler associated with DispatchHandle so that it will no longer be
   called in response to a software SMI.
 
   @param[in] This                Pointer to the EFI_SMM_SW_DISPATCH2_PROTOCOL instance.
@@ -117,15 +115,15 @@ EFI_STATUS
 ///
 /// Interface structure for the SMM Software SMI Dispatch Protocol.
 ///
-/// The EFI_SMM_SW_DISPATCH2_PROTOCOL provides the ability to install child handlers for the 
-/// given software.  These handlers will respond to software interrupts, and the maximum software 
+/// The EFI_SMM_SW_DISPATCH2_PROTOCOL provides the ability to install child handlers for the
+/// given software.  These handlers will respond to software interrupts, and the maximum software
 /// interrupt in the EFI_SMM_SW_REGISTER_CONTEXT is denoted by MaximumSwiValue.
 ///
 struct _EFI_SMM_SW_DISPATCH2_PROTOCOL {
   EFI_SMM_SW_REGISTER2    Register;
   EFI_SMM_SW_UNREGISTER2  UnRegister;
   ///
-  /// A read-only field that describes the maximum value that can be used in the 
+  /// A read-only field that describes the maximum value that can be used in the
   /// EFI_SMM_SW_DISPATCH2_PROTOCOL.Register() service.
   ///
   UINTN                  MaximumSwiValue;

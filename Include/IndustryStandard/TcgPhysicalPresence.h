@@ -1,13 +1,13 @@
 /** @file
   TCG Physical Presence definition.
 
-Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
-This program and the accompanying materials 
-are licensed and made available under the terms and conditions of the BSD License 
-which accompanies this distribution.  The full text of the license may be found at 
+Copyright (c) 2015 - 2018, Intel Corporation. All rights reserved.<BR>
+This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
 http://opensource.org/licenses/bsd-license.php
 
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS, 
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 **/
@@ -41,8 +41,8 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #define TCG_PP_RETURN_TPM_OPERATION_RESPONSE_FAILURE                   1
 
 //
-// TCG PP definition of return code for Sumbit TPM Request to Pre-OS Environment
-// and Sumbit TPM Request to Pre-OS Environment 2
+// TCG PP definition of return code for Submit TPM Request to Pre-OS Environment
+// and Submit TPM Request to Pre-OS Environment 2
 //
 #define TCG_PP_SUBMIT_REQUEST_TO_PREOS_SUCCESS                                  0
 #define TCG_PP_SUBMIT_REQUEST_TO_PREOS_NOT_IMPLEMENTED                          1
@@ -65,7 +65,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #define TCG_PHYSICAL_PRESENCE_ENABLE                                  1
 #define TCG_PHYSICAL_PRESENCE_DISABLE                                 2
 #define TCG_PHYSICAL_PRESENCE_ACTIVATE                                3
-#define TCG_PHYSICAL_PRESENCE_DEACTIVATE                              4 
+#define TCG_PHYSICAL_PRESENCE_DEACTIVATE                              4
 #define TCG_PHYSICAL_PRESENCE_CLEAR                                   5
 #define TCG_PHYSICAL_PRESENCE_ENABLE_ACTIVATE                         6
 #define TCG_PHYSICAL_PRESENCE_DEACTIVATE_DISABLE                      7

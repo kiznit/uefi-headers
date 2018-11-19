@@ -2,6 +2,7 @@
   This protocol provides generic image decoder interfaces to various image formats.
 
 (C) Copyright 2016 Hewlett Packard Enterprise Development LP<BR>
+  Copyright (c) 2016-2018, Intel Corporation. All rights reserved.<BR>
 
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
@@ -11,15 +12,17 @@ http://opensource.org/licenses/bsd-license.php.
 THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
+  @par Revision Reference:
+  This Protocol was introduced in UEFI Specification 2.6.
+
 **/
-#ifndef __EFI_IMAGE_DECODER_PROTOCOL_H__
-#define __EFI_IMAGE_DECODER_PROTOCOL_H__
+#ifndef __HII_IMAGE_DECODER_H__
+#define __HII_IMAGE_DECODER_H__
 
 #include <Protocol/HiiImage.h>
 
-
 #define EFI_HII_IMAGE_DECODER_PROTOCOL_GUID \
-  { 0x2f707ebb, 0x4a1a, 0x11d4, {0x9a,0x38,0x00,0x90,0x27,0x3f,0xc1,0x4d}}
+  {0x9e66f251, 0x727c, 0x418c, { 0xbf, 0xd6, 0xc2, 0xb4, 0x25, 0x28, 0x18, 0xea }}
 
 
 #define EFI_HII_IMAGE_DECODER_NAME_JPEG_GUID \
@@ -56,6 +59,9 @@ typedef struct _EFI_HII_IMAGE_DECODER_IMAGE_INFO_HEADER {
   UINT8                               ColorDepthInBits;
 } EFI_HII_IMAGE_DECODER_IMAGE_INFO_HEADER;
 
+#define EFI_IMAGE_JPEG_SCANTYPE_PROGREESSIVE 0x01
+#define EFI_IMAGE_JPEG_SCANTYPE_INTERLACED   0x02
+
 //
 // EFI_HII_IMAGE_DECODER_JPEG_INFO
 // Header         The common header
@@ -64,9 +70,6 @@ typedef struct _EFI_HII_IMAGE_DECODER_IMAGE_INFO_HEADER {
 //
 typedef struct _EFI_HII_IMAGE_DECODER_JPEG_INFO {
   EFI_HII_IMAGE_DECODER_IMAGE_INFO_HEADER  Header;
-
-#define EFI_IMAGE_JPEG_SCANTYPE_PROGREESSIVE 0x01
-#define EFI_IMAGE_JPEG_SCANTYPE_INTERLACED   0x02
   UINT16                                    ScanType;
   UINT64                                    Reserved;
 } EFI_HII_IMAGE_DECODER_JPEG_INFO;
@@ -82,6 +85,17 @@ typedef struct _EFI_HII_IMAGE_DECODER_PNG_INFO {
   UINT16                                    Channels;
   UINT64                                    Reserved;
 } EFI_HII_IMAGE_DECODER_PNG_INFO;
+
+//
+// EFI_HII_IMAGE_DECODER_OTHER_INFO
+//
+typedef struct _EFI_HII_IMAGE_DECODER_OTHER_INFO {
+  EFI_HII_IMAGE_DECODER_IMAGE_INFO_HEADER Header;
+  CHAR16                                  ImageExtenion[1];
+  //
+  // Variable length of image file extension name.
+  //
+} EFI_HII_IMAGE_DECODER_OTHER_INFO;
 
 /**
   There could be more than one EFI_HII_IMAGE_DECODER_PROTOCOL instances installed
@@ -104,10 +118,10 @@ typedef struct _EFI_HII_IMAGE_DECODER_PNG_INFO {
 **/
 typedef
 EFI_STATUS
-(EFIAPI *EFI_HII_IMAGE_DECODER_GET_DECODER_NAME)(
+(EFIAPI *EFI_HII_IMAGE_DECODER_GET_NAME)(
   IN      EFI_HII_IMAGE_DECODER_PROTOCOL   *This,
   IN OUT  EFI_GUID                         **DecoderName,
-  IN OUT  UINT16                           *NumberofDecoderName
+  IN OUT  UINT16                           *NumberOfDecoderName
   );
 
 /**
@@ -122,7 +136,7 @@ EFI_STATUS
   @param This                    EFI_HII_IMAGE_DECODER_PROTOCOL instance.
   @param Image                   Pointer to the image raw data.
   @param SizeOfImage             Size of the entire image raw data.
-  @param ImageInfo               Pointer to recieve EFI_HII_IMAGE_DECODER_IMAGE_INFO_HEADER.
+  @param ImageInfo               Pointer to receive EFI_HII_IMAGE_DECODER_IMAGE_INFO_HEADER.
 
   @retval EFI_SUCCESS            Get image info success.
   @retval EFI_UNSUPPORTED        Unsupported format of image.
@@ -175,12 +189,12 @@ EFI_STATUS
   IN      EFI_HII_IMAGE_DECODER_PROTOCOL   *This,
   IN      VOID                              *Image,
   IN      UINTN                             ImageRawDataSize,
-  IN OUT  EFI_IMAGE_OUTPUT                  **BitMap OPTIONAL,
+  IN OUT  EFI_IMAGE_OUTPUT                  **Bitmap,
   IN      BOOLEAN                           Transparent
   );
 
 struct _EFI_HII_IMAGE_DECODER_PROTOCOL {
-  EFI_HII_IMAGE_DECODER_GET_DECODER_NAME  GetImageDecoderName;
+  EFI_HII_IMAGE_DECODER_GET_NAME          GetImageDecoderName;
   EFI_HII_IMAGE_DECODER_GET_IMAGE_INFO    GetImageInfo;
   EFI_HII_IMAGE_DECODER_DECODE            DecodeImage;
 };

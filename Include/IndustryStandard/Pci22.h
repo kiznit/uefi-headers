@@ -7,15 +7,15 @@
     PC Card Standard, 8.0
     PCI Power Management Interface Specifiction, Revision 1.2
 
-  Copyright (c) 2006 - 2016, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.<BR>
   Copyright (c) 2014 - 2015, Hewlett-Packard Development Company, L.P.<BR>
-  This program and the accompanying materials                          
-  are licensed and made available under the terms and conditions of the BSD License         
-  which accompanies this distribution.  The full text of the license may be found at        
-  http://opensource.org/licenses/bsd-license.php                                            
+  This program and the accompanying materials
+  are licensed and made available under the terms and conditions of the BSD License
+  which accompanies this distribution.  The full text of the license may be found at
+  http://opensource.org/licenses/bsd-license.php
 
-  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 **/
 
@@ -116,8 +116,8 @@ typedef union {
   PCI_TYPE01  Bridge;
 } PCI_TYPE_GENERIC;
 
-/// 
-/// CardBus Conroller Configuration Space, 
+///
+/// CardBus Conroller Configuration Space,
 /// Section 4.5.1, PC Card Standard. 8.0
 ///
 typedef struct {
@@ -158,7 +158,7 @@ typedef struct {
 #define   PCI_CLASS_MASS_STORAGE_OTHER  0x80
 
 #define PCI_CLASS_NETWORK             0x02
-#define   PCI_CLASS_NETWORK_ETHERNET    0x00  
+#define   PCI_CLASS_NETWORK_ETHERNET    0x00
 #define   PCI_CLASS_NETWORK_TOKENRING   0x01
 #define   PCI_CLASS_NETWORK_FDDI        0x02
 #define   PCI_CLASS_NETWORK_ATM         0x03
@@ -171,7 +171,7 @@ typedef struct {
 #define     PCI_IF_VGA_8514               0x01
 #define   PCI_CLASS_DISPLAY_XGA         0x01
 #define   PCI_CLASS_DISPLAY_3D          0x02
-#define   PCI_CLASS_DISPLAY_OTHER       0x80  
+#define   PCI_CLASS_DISPLAY_OTHER       0x80
 
 #define PCI_CLASS_MEDIA               0x04
 #define   PCI_CLASS_MEDIA_VIDEO         0x00
@@ -199,7 +199,7 @@ typedef struct {
 #define   PCI_CLASS_BRIDGE_OTHER        0x80
 #define   PCI_CLASS_BRIDGE_ISA_PDECODE  0x80
 
-#define PCI_CLASS_SCC                 0x07  ///< Simple communications controllers 
+#define PCI_CLASS_SCC                 0x07  ///< Simple communications controllers
 #define   PCI_SUBCLASS_SERIAL           0x00
 #define     PCI_IF_GENERIC_XT             0x00
 #define     PCI_IF_16450                  0x01
@@ -228,8 +228,8 @@ typedef struct {
 #define     PCI_IF_8259_PIC               0x00
 #define     PCI_IF_ISA_PIC                0x01
 #define     PCI_IF_EISA_PIC               0x02
-#define     PCI_IF_APIC_CONTROLLER        0x10  ///< I/O APIC interrupt controller , 32 bye none-prefectable memory.  
-#define     PCI_IF_APIC_CONTROLLER2       0x20 
+#define     PCI_IF_APIC_CONTROLLER        0x10  ///< I/O APIC interrupt controller , 32 bye none-prefectable memory.
+#define     PCI_IF_APIC_CONTROLLER2       0x20
 #define   PCI_SUBCLASS_DMA              0x01
 #define     PCI_IF_8237_DMA               0x00
 #define     PCI_IF_ISA_DMA                0x01
@@ -297,25 +297,25 @@ typedef struct {
 
 #define PCI_SECURITY_CONTROLLER       0x10   ///< Encryption and decryption controller
 #define   PCI_SUBCLASS_NET_COMPUT       0x00
-#define   PCI_SUBCLASS_ENTERTAINMENT    0x10 
+#define   PCI_SUBCLASS_ENTERTAINMENT    0x10
 #define   PCI_SUBCLASS_SECURITY_OTHER   0x80
 
 #define PCI_CLASS_DPIO                0x11
 #define   PCI_SUBCLASS_DPIO             0x00
 #define   PCI_SUBCLASS_DPIO_OTHER       0x80
 
-/**  
+/**
   Macro that checks whether the Base Class code of device matched.
 
   @param  _p      Specified device.
   @param  c       Base Class code needs matching.
 
   @retval TRUE    Base Class code matches the specified device.
-  @retval FALSE   Base Class code doesn't match the specified device.         
+  @retval FALSE   Base Class code doesn't match the specified device.
 
 **/
 #define IS_CLASS1(_p, c)              ((_p)->Hdr.ClassCode[2] == (c))
-/**  
+/**
   Macro that checks whether the Base Class code and Sub-Class code of device matched.
 
   @param  _p      Specified device.
@@ -323,11 +323,11 @@ typedef struct {
   @param  s       Sub-Class code needs matching.
 
   @retval TRUE    Base Class code and Sub-Class code match the specified device.
-  @retval FALSE   Base Class code and Sub-Class code don't match the specified device.         
+  @retval FALSE   Base Class code and Sub-Class code don't match the specified device.
 
 **/
 #define IS_CLASS2(_p, c, s)           (IS_CLASS1 (_p, c) && ((_p)->Hdr.ClassCode[1] == (s)))
-/**  
+/**
   Macro that checks whether the Base Class code, Sub-Class code and Interface code of device matched.
 
   @param  _p      Specified device.
@@ -336,12 +336,12 @@ typedef struct {
   @param  p       Interface code needs matching.
 
   @retval TRUE    Base Class code, Sub-Class code and Interface code match the specified device.
-  @retval FALSE   Base Class code, Sub-Class code and Interface code don't match the specified device.         
+  @retval FALSE   Base Class code, Sub-Class code and Interface code don't match the specified device.
 
 **/
 #define IS_CLASS3(_p, c, s, p)        (IS_CLASS2 (_p, c, s) && ((_p)->Hdr.ClassCode[0] == (p)))
 
-/**  
+/**
   Macro that checks whether device is a display controller.
 
   @param  _p      Specified device.
@@ -351,7 +351,7 @@ typedef struct {
 
 **/
 #define IS_PCI_DISPLAY(_p)            IS_CLASS1 (_p, PCI_CLASS_DISPLAY)
-/**  
+/**
   Macro that checks whether device is a VGA-compatible controller.
 
   @param  _p      Specified device.
@@ -361,7 +361,7 @@ typedef struct {
 
 **/
 #define IS_PCI_VGA(_p)                IS_CLASS3 (_p, PCI_CLASS_DISPLAY, PCI_CLASS_DISPLAY_VGA, PCI_IF_VGA_VGA)
-/**  
+/**
   Macro that checks whether device is an 8514-compatible controller.
 
   @param  _p      Specified device.
@@ -371,7 +371,7 @@ typedef struct {
 
 **/
 #define IS_PCI_8514(_p)               IS_CLASS3 (_p, PCI_CLASS_DISPLAY, PCI_CLASS_DISPLAY_VGA, PCI_IF_VGA_8514)
-/**  
+/**
   Macro that checks whether device is built before the Class Code field was defined.
 
   @param  _p      Specified device.
@@ -381,7 +381,7 @@ typedef struct {
 
 **/
 #define IS_PCI_OLD(_p)                IS_CLASS1 (_p, PCI_CLASS_OLD)
-/**  
+/**
   Macro that checks whether device is a VGA-compatible device built before the Class Code field was defined.
 
   @param  _p      Specified device.
@@ -391,7 +391,7 @@ typedef struct {
 
 **/
 #define IS_PCI_OLD_VGA(_p)            IS_CLASS2 (_p, PCI_CLASS_OLD, PCI_CLASS_OLD_VGA)
-/**  
+/**
   Macro that checks whether device is an IDE controller.
 
   @param  _p      Specified device.
@@ -401,7 +401,7 @@ typedef struct {
 
 **/
 #define IS_PCI_IDE(_p)                IS_CLASS2 (_p, PCI_CLASS_MASS_STORAGE, PCI_CLASS_MASS_STORAGE_IDE)
-/**  
+/**
   Macro that checks whether device is a SCSI bus controller.
 
   @param  _p      Specified device.
@@ -411,7 +411,7 @@ typedef struct {
 
 **/
 #define IS_PCI_SCSI(_p)               IS_CLASS2 (_p, PCI_CLASS_MASS_STORAGE, PCI_CLASS_MASS_STORAGE_SCSI)
-/**  
+/**
   Macro that checks whether device is a RAID controller.
 
   @param  _p      Specified device.
@@ -421,7 +421,7 @@ typedef struct {
 
 **/
 #define IS_PCI_RAID(_p)               IS_CLASS2 (_p, PCI_CLASS_MASS_STORAGE, PCI_CLASS_MASS_STORAGE_RAID)
-/**  
+/**
   Macro that checks whether device is an ISA bridge.
 
   @param  _p      Specified device.
@@ -431,7 +431,7 @@ typedef struct {
 
 **/
 #define IS_PCI_LPC(_p)                IS_CLASS2 (_p, PCI_CLASS_BRIDGE, PCI_CLASS_BRIDGE_ISA)
-/**  
+/**
   Macro that checks whether device is a PCI-to-PCI bridge.
 
   @param  _p      Specified device.
@@ -441,7 +441,7 @@ typedef struct {
 
 **/
 #define IS_PCI_P2P(_p)                IS_CLASS3 (_p, PCI_CLASS_BRIDGE, PCI_CLASS_BRIDGE_P2P, PCI_IF_BRIDGE_P2P)
-/**  
+/**
   Macro that checks whether device is a Subtractive Decode PCI-to-PCI bridge.
 
   @param  _p      Specified device.
@@ -451,7 +451,7 @@ typedef struct {
 
 **/
 #define IS_PCI_P2P_SUB(_p)            IS_CLASS3 (_p, PCI_CLASS_BRIDGE, PCI_CLASS_BRIDGE_P2P, PCI_IF_BRIDGE_P2P_SUBTRACTIVE)
-/**  
+/**
   Macro that checks whether device is a 16550-compatible serial controller.
 
   @param  _p      Specified device.
@@ -461,7 +461,7 @@ typedef struct {
 
 **/
 #define IS_PCI_16550_SERIAL(_p)       IS_CLASS3 (_p, PCI_CLASS_SCC, PCI_SUBCLASS_SERIAL, PCI_IF_16550)
-/**  
+/**
   Macro that checks whether device is a Universal Serial Bus controller.
 
   @param  _p      Specified device.
@@ -473,7 +473,7 @@ typedef struct {
 #define IS_PCI_USB(_p)                IS_CLASS2 (_p, PCI_CLASS_SERIAL, PCI_CLASS_SERIAL_USB)
 
 //
-// the definition of Header Type 
+// the definition of Header Type
 //
 #define HEADER_TYPE_DEVICE            0x00
 #define HEADER_TYPE_PCI_TO_PCI_BRIDGE 0x01
@@ -483,7 +483,7 @@ typedef struct {
 // Mask of Header type
 //
 #define HEADER_LAYOUT_CODE            0x7f
-/**  
+/**
   Macro that checks whether device is a PCI-PCI bridge.
 
   @param  _p      Specified device.
@@ -493,7 +493,7 @@ typedef struct {
 
 **/
 #define IS_PCI_BRIDGE(_p)             (((_p)->Hdr.HeaderType & HEADER_LAYOUT_CODE) == (HEADER_TYPE_PCI_TO_PCI_BRIDGE))
-/**  
+/**
   Macro that checks whether device is a CardBus bridge.
 
   @param  _p      Specified device.
@@ -503,7 +503,7 @@ typedef struct {
 
 **/
 #define IS_CARDBUS_BRIDGE(_p)         (((_p)->Hdr.HeaderType & HEADER_LAYOUT_CODE) == (HEADER_TYPE_CARDBUS_BRIDGE))
-/**  
+/**
   Macro that checks whether device is a multiple functions device.
 
   @param  _p      Specified device.
@@ -548,17 +548,17 @@ typedef struct {
 //
 // defined in PCI-to-PCI Bridge Architecture Specification
 //
-#define PCI_BRIDGE_PRIMARY_BUS_REGISTER_OFFSET      0x18   
-#define PCI_BRIDGE_SECONDARY_BUS_REGISTER_OFFSET    0x19   
-#define PCI_BRIDGE_SUBORDINATE_BUS_REGISTER_OFFSET  0x1a   
+#define PCI_BRIDGE_PRIMARY_BUS_REGISTER_OFFSET      0x18
+#define PCI_BRIDGE_SECONDARY_BUS_REGISTER_OFFSET    0x19
+#define PCI_BRIDGE_SUBORDINATE_BUS_REGISTER_OFFSET  0x1a
 #define PCI_BRIDGE_SECONDARY_LATENCY_TIMER_OFFSET   0x1b
-#define PCI_BRIDGE_STATUS_REGISTER_OFFSET           0x1E   
-#define PCI_BRIDGE_CONTROL_REGISTER_OFFSET          0x3E   
+#define PCI_BRIDGE_STATUS_REGISTER_OFFSET           0x1E
+#define PCI_BRIDGE_CONTROL_REGISTER_OFFSET          0x3E
 
 ///
 /// Interrupt Line "Unknown" or "No connection" value defined for x86 based system
 ///
-#define PCI_INT_LINE_UNKNOWN                        0xFF               
+#define PCI_INT_LINE_UNKNOWN                        0xFF
 
 ///
 /// PCI Access Data Format
@@ -635,6 +635,7 @@ typedef union {
 #define EFI_PCI_CAPABILITY_ID_SLOTID  0x04
 #define EFI_PCI_CAPABILITY_ID_MSI     0x05
 #define EFI_PCI_CAPABILITY_ID_HOTPLUG 0x06
+#define EFI_PCI_CAPABILITY_ID_SHPC    0x0C
 
 ///
 /// Capabilities List Header
@@ -644,18 +645,6 @@ typedef struct {
   UINT8 CapabilityID;
   UINT8 NextItemPtr;
 } EFI_PCI_CAPABILITY_HDR;
-
-///
-/// Power Management Register Block Definition 
-/// Section 3.2, PCI Power Management Interface Specifiction, Revision 1.2
-///
-typedef struct {
-  EFI_PCI_CAPABILITY_HDR  Hdr;
-  UINT16                  PMC;
-  UINT16                  PMCSR;
-  UINT8                   BridgeExtention;
-  UINT8                   Data;
-} EFI_PCI_CAPABILITY_PMI;
 
 ///
 /// PMC - Power Management Capabilities
@@ -684,7 +673,9 @@ typedef union {
 typedef union {
   struct {
     UINT16 PowerState : 2;
-    UINT16 Reserved : 6;
+    UINT16 ReservedForPciExpress : 1;
+    UINT16 NoSoftReset : 1;
+    UINT16 Reserved : 4;
     UINT16 PmeEnable : 1;
     UINT16 DataSelect : 4;
     UINT16 DataScale : 2;
@@ -692,6 +683,36 @@ typedef union {
   } Bits;
   UINT16 Data;
 } EFI_PCI_PMCSR;
+
+#define PCI_POWER_STATE_D0     0
+#define PCI_POWER_STATE_D1     1
+#define PCI_POWER_STATE_D2     2
+#define PCI_POWER_STATE_D3_HOT 3
+
+///
+/// PMCSR_BSE - PMCSR PCI-to-PCI Bridge Support Extensions
+/// Section 3.2.5, PCI Power Management Interface Specifiction, Revision 1.2
+///
+typedef union {
+  struct {
+    UINT8 Reserved : 6;
+    UINT8 B2B3 : 1;
+    UINT8 BusPowerClockControl : 1;
+  } Bits;
+  UINT8   Uint8;
+} EFI_PCI_PMCSR_BSE;
+
+///
+/// Power Management Register Block Definition
+/// Section 3.2, PCI Power Management Interface Specifiction, Revision 1.2
+///
+typedef struct {
+  EFI_PCI_CAPABILITY_HDR  Hdr;
+  EFI_PCI_PMC             PMC;
+  EFI_PCI_PMCSR           PMCSR;
+  EFI_PCI_PMCSR_BSE       BridgeExtention;
+  UINT8                   Data;
+} EFI_PCI_CAPABILITY_PMI;
 
 ///
 /// A.G.P Capability
@@ -749,7 +770,7 @@ typedef struct {
 } EFI_PCI_CAPABILITY_MSI64;
 
 ///
-/// Capability EFI_PCI_CAPABILITY_ID_HOTPLUG, 
+/// Capability EFI_PCI_CAPABILITY_ID_HOTPLUG,
 /// CompactPCI Hot Swap Specification PICMG 2.1, R1.0
 ///
 typedef struct {
@@ -759,27 +780,17 @@ typedef struct {
   ///
 } EFI_PCI_CAPABILITY_HOTPLUG;
 
-#define DEVICE_ID_NOCARE    0xFFFF
-
-#define PCI_ACPI_UNUSED     0
-#define PCI_BAR_NOCHANGE    0
-#define PCI_BAR_OLD_ALIGN   0xFFFFFFFFFFFFFFFFULL
-#define PCI_BAR_EVEN_ALIGN  0xFFFFFFFFFFFFFFFEULL
-#define PCI_BAR_SQUAD_ALIGN 0xFFFFFFFFFFFFFFFDULL
-#define PCI_BAR_DQUAD_ALIGN 0xFFFFFFFFFFFFFFFCULL
-
 #define PCI_BAR_IDX0        0x00
 #define PCI_BAR_IDX1        0x01
 #define PCI_BAR_IDX2        0x02
 #define PCI_BAR_IDX3        0x03
 #define PCI_BAR_IDX4        0x04
 #define PCI_BAR_IDX5        0x05
-#define PCI_BAR_ALL         0xFF
 
 ///
 /// EFI PCI Option ROM definitions
-/// 
-#define EFI_ROOT_BRIDGE_LIST                            'eprb'  
+///
+#define EFI_ROOT_BRIDGE_LIST                            'eprb'
 #define EFI_PCI_EXPANSION_ROM_HEADER_EFISIGNATURE       0x0EF1  ///< defined in UEFI Spec.
 
 #define PCI_EXPANSION_ROM_HEADER_SIGNATURE              0xaa55

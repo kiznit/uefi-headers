@@ -2,7 +2,7 @@
   The UEFI Inline Cryptographic Interface protocol provides services to abstract
   access to inline cryptographic capabilities.
 
-  Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2015-2018, Intel Corporation. All rights reserved.<BR>
   This program and the accompanying materials
   are licensed and made available under the terms and conditions of the BSD License
   which accompanies this distribution.  The full text of the license may be found at
@@ -10,6 +10,9 @@
 
   THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
   WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+  @par Revision Reference:
+  This Protocol was introduced in UEFI Specification 2.5.
 
 **/
 
@@ -172,7 +175,7 @@ typedef struct {
 
   @param[in]  This                 Pointer to the EFI_BLOCK_IO_CRYPTO_PROTOCOL instance.
   @param[in]  ExtendedVerification Indicates that the driver may perform a more exhausive
-                                   verfication operation of the device during reset.
+                                   verification operation of the device during reset.
 
   @retval EFI_SUCCESS              The block device was reset.
   @retval EFI_DEVICE_ERROR         The block device is not functioning correctly and could

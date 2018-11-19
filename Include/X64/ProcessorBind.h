@@ -1,14 +1,14 @@
 /** @file
   Processor or Compiler specific defines and types x64 (Intel 64, AMD64).
 
-  Copyright (c) 2006 - 2015, Intel Corporation. All rights reserved.<BR>
-  This program and the accompanying materials                          
-  are licensed and made available under the terms and conditions of the BSD License         
-  which accompanies this distribution.  The full text of the license may be found at        
-  http://opensource.org/licenses/bsd-license.php                                            
+  Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.<BR>
+  This program and the accompanying materials
+  are licensed and made available under the terms and conditions of the BSD License
+  which accompanies this distribution.  The full text of the license may be found at
+  http://opensource.org/licenses/bsd-license.php
 
-  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 **/
 
@@ -27,6 +27,19 @@
 #pragma pack()
 #endif
 
+#if defined(__GNUC__) && defined(__pic__) && !defined(USING_LTO)
+//
+// Mark all symbol declarations and references as hidden, meaning they will
+// not be subject to symbol preemption. This allows the compiler to refer to
+// symbols directly using relative references rather than via the GOT, which
+// contains absolute symbol addresses that are subject to runtime relocation.
+//
+// The LTO linker will not emit GOT based relocations when all symbol
+// references can be resolved locally, and so there is no need to set the
+// pragma in that case (and doing so will cause other issues).
+//
+#pragma GCC visibility push (hidden)
+#endif
 
 #if defined(__INTEL_COMPILER)
 //
@@ -80,7 +93,7 @@
 #pragma warning ( disable : 4057 )
 
 //
-// ASSERT(FALSE) or while (TRUE) are legal constructes so supress this warning
+// ASSERT(FALSE) or while (TRUE) are legal constructs so suppress this warning
 //
 #pragma warning ( disable : 4127 )
 
@@ -94,24 +107,24 @@
 //
 #pragma warning ( disable : 4206 )
 
-#if _MSC_VER == 1800 || _MSC_VER == 1900
+#if _MSC_VER == 1800 || _MSC_VER == 1900 || _MSC_VER >= 1910
 
 //
 // Disable these warnings for VS2013.
 //
 
 //
-// This warning is for potentially uninitialized local variable, and it may cause false 
+// This warning is for potentially uninitialized local variable, and it may cause false
 // positive issues in VS2013 and VS2015 build
 //
 #pragma warning ( disable : 4701 )
-  
+
 //
-// This warning is for potentially uninitialized local pointer variable, and it may cause 
+// This warning is for potentially uninitialized local pointer variable, and it may cause
 // false positive issues in VS2013 and VS2015 build
 //
 #pragma warning ( disable : 4703 )
-  
+
 #endif
 
 #endif
@@ -119,7 +132,7 @@
 
 #if defined(_MSC_EXTENSIONS)
   //
-  // use Microsoft C complier dependent integer width types 
+  // use Microsoft C compiler dependent integer width types
   //
 
   ///
@@ -254,9 +267,20 @@ typedef INT64   INTN;
 #define MAX_UINTN  ((UINTN)0xFFFFFFFFFFFFFFFFULL)
 
 ///
+/// Minimum legal x64 INTN value.
+///
+#define MIN_INTN   (((INTN)-9223372036854775807LL) - 1)
+
+///
 /// The stack alignment required for x64
 ///
 #define CPU_STACK_ALIGNMENT   16
+
+///
+/// Page allocation granularity for x64
+///
+#define DEFAULT_PAGE_ALLOCATION_GRANULARITY   (0x1000)
+#define RUNTIME_PAGE_ALLOCATION_GRANULARITY   (0x1000)
 
 //
 // Modifier to ensure that all protocol member functions and EFI intrinsics
@@ -270,24 +294,24 @@ typedef INT64   INTN;
 #elif defined(_MSC_EXTENSIONS)
   ///
   /// Microsoft* compiler specific method for EFIAPI calling convention.
-  /// 
-  #define EFIAPI __cdecl  
+  ///
+  #define EFIAPI __cdecl
 #elif defined(__GNUC__)
   ///
   /// Define the standard calling convention regardless of optimization level.
   /// The GCC support assumes a GCC compiler that supports the EFI ABI. The EFI
-  /// ABI is much closer to the x64 Microsoft* ABI than standard x64 (x86-64) 
-  /// GCC ABI. Thus a standard x64 (x86-64) GCC compiler can not be used for 
-  /// x64. Warning the assembly code in the MDE x64 does not follow the correct 
+  /// ABI is much closer to the x64 Microsoft* ABI than standard x64 (x86-64)
+  /// GCC ABI. Thus a standard x64 (x86-64) GCC compiler can not be used for
+  /// x64. Warning the assembly code in the MDE x64 does not follow the correct
   /// ABI for the standard x64 (x86-64) GCC.
   ///
-  #define EFIAPI 
+  #define EFIAPI
 #else
   ///
   /// The default for a non Microsoft* or GCC compiler is to assume the EFI ABI
-  /// is the standard. 
+  /// is the standard.
   ///
-  #define EFIAPI       
+  #define EFIAPI
 #endif
 
 #if defined(__GNUC__)
@@ -300,13 +324,13 @@ typedef INT64   INTN;
 
 /**
   Return the pointer to the first instruction of a function given a function pointer.
-  On x64 CPU architectures, these two pointer values are the same, 
+  On x64 CPU architectures, these two pointer values are the same,
   so the implementation of this macro is very simple.
-  
+
   @param  FunctionPointer   A pointer to a function.
 
   @return The pointer to the first instruction of a function given a function pointer.
-  
+
 **/
 #define FUNCTION_ENTRY_POINT(FunctionPointer) (VOID *)(UINTN)(FunctionPointer)
 

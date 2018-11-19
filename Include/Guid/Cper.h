@@ -1,7 +1,7 @@
 /** @file
   GUIDs and definitions used for Common Platform Error Record.
 
-  Copyright (c) 2011 - 2016, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2011 - 2017, Intel Corporation. All rights reserved.<BR>
   (C) Copyright 2016 Hewlett Packard Enterprise Development LP<BR>
   This program and the accompanying materials
   are licensed and made available under the terms and conditions of the BSD License
@@ -12,7 +12,7 @@
   WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
   @par Revision Reference:
-  GUIDs defined in UEFI 2.6 Specification.
+  GUIDs defined in UEFI 2.7 Specification.
 
 **/
 
@@ -256,6 +256,7 @@ typedef struct {
 ///@{
 #define EFI_GENERIC_ERROR_PROC_TYPE_IA32_X64         0x00
 #define EFI_GENERIC_ERROR_PROC_TYPE_IA64             0x01
+#define EFI_GENERIC_ERROR_PROC_TYPE_ARM              0x02
 ///@}
 
 ///
@@ -265,6 +266,8 @@ typedef struct {
 #define EFI_GENERIC_ERROR_PROC_ISA_IA32              0x00
 #define EFI_GENERIC_ERROR_PROC_ISA_IA64              0x01
 #define EFI_GENERIC_ERROR_PROC_ISA_X64               0x02
+#define EFI_GENERIC_ERROR_PROC_ISA_ARM_A32_T32       0x03
+#define EFI_GENERIC_ERROR_PROC_ISA_ARM_A64           0x04
 ///@}
 
 ///
@@ -1088,16 +1091,21 @@ typedef struct {
 
 ///
 /// Identifies the type of firmware error record
-///
+///@{
 #define EFI_FIRMWARE_ERROR_TYPE_IPF_SAL              0x00
+#define EFI_FIRMWARE_ERROR_TYPE_SOC_TYPE1            0x01
+#define EFI_FIRMWARE_ERROR_TYPE_SOC_TYPE2            0x02
+///@}
 
 ///
 /// Firmware Error Record Section
 ///
 typedef struct {
   UINT8       ErrorType;
-  UINT8       Resv1[7];
+  UINT8       Revision;
+  UINT8       Resv1[6];
   UINT64      RecordId;
+  EFI_GUID    RecordIdGuid;
 } EFI_FIRMWARE_ERROR_DATA;
 
 ///
